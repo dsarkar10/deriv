@@ -1,0 +1,80 @@
+{
+  "A": {
+    "status": "stable",
+    "windows": [
+      {
+        "window": "window_1",
+        "num_trades": 50,
+        "total_return": 1474.7,
+        "start": "2025-11-14 22:00:00+00:00",
+        "end": "2026-01-15 14:00:00+00:00"
+      },
+      {
+        "window": "window_2",
+        "num_trades": 62,
+        "total_return": 5350.58,
+        "start": "2026-01-15 15:00:00+00:00",
+        "end": "2026-03-17 02:00:00+00:00"
+      },
+      {
+        "window": "window_3",
+        "num_trades": 52,
+        "total_return": 3851.57,
+        "start": "2026-03-17 03:00:00+00:00",
+        "end": "2026-05-14 21:00:00+00:00"
+      }
+    ]
+  },
+  "B": {
+    "status": "unstable",
+    "windows": [
+      {
+        "window": "window_1",
+        "num_trades": 1,
+        "total_return": -0.27,
+        "start": "2025-01-01 09:30:00",
+        "end": "2025-01-11 19:15:00"
+      },
+      {
+        "window": "window_2",
+        "num_trades": 4,
+        "total_return": 0.28,
+        "start": "2025-01-11 19:30:00",
+        "end": "2025-01-22 05:15:00"
+      },
+      {
+        "window": "window_3",
+        "num_trades": 3,
+        "total_return": -0.47,
+        "start": "2025-01-22 05:30:00",
+        "end": "2025-02-01 15:30:00"
+      }
+    ]
+  },
+  "C": {
+    "status": "stable",
+    "windows": [
+      {
+        "window": "window_1",
+        "num_trades": 50,
+        "total_return": 0.05,
+        "start": "2026-05-15 09:00:00",
+        "end": "2026-05-16 01:39:00"
+      },
+      {
+        "window": "window_2",
+        "num_trades": 50,
+        "total_return": 0.08,
+        "start": "2026-05-16 01:40:00",
+        "end": "2026-05-16 18:19:00"
+      },
+      {
+        "window": "window_3",
+        "num_trades": 50,
+        "total_return": 0.06,
+        "start": "2026-05-16 18:20:00",
+        "end": "2026-05-17 11:00:00"
+      }
+    ]
+  }
+}

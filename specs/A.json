@@ -1,0 +1,66 @@
+{
+  "strategy_id": "A",
+  "instrument": "EURUSD=X",
+  "timeframe": "1h",
+  "data_source": "yfinance",
+  "entry_conditions": [
+    {
+      "condition_id": "long_breakout",
+      "expression": "close > first_hour_high + 0.0005",
+      "indicators_required": []
+    },
+    {
+      "condition_id": "short_breakout",
+      "expression": "close < first_hour_low - 0.0005",
+      "indicators_required": []
+    }
+  ],
+  "exit_conditions": [
+    {
+      "condition_id": "stop_loss",
+      "expression": "low <= stop_level"
+    },
+    {
+      "condition_id": "take_profit",
+      "expression": "high >= target_level"
+    },
+    {
+      "condition_id": "end_of_day",
+      "expression": "hour >= 16"
+    }
+  ],
+  "position_sizing_rule": "fixed 1 standard lot (100k units)",
+  "stop_loss_rule": "long: first_hour_low; short: first_hour_high",
+  "take_profit_rule": "long: entry + 1.5 * (entry - stop); short: entry - 1.5 * (stop - entry)",
+  "session_filters": [
+    "trade only after first hour of London open (8am-9am UTC)",
+    "skip Wednesdays",
+    "close before NY close (approx 4pm EST)"
+  ],
+  "risk_controls": [
+    "close all positions before NY close",
+    "no trading on Wednesdays"
+  ],
+  "explicit_ambiguities": [
+    {
+      "ambiguity": "What counts as 'first hour after 8am London' \u2014 does it use London local time, BST/GMT conversion, or UTC?",
+      "assumption_used_for_backtest": "London open = 8am UTC (ignoring BST daylight saving for simplicity)",
+      "impact_if_different": "Using BST (UTC+1) would shift the breakout window by 1 hour, potentially changing which price bars define the range."
+    },
+    {
+      "ambiguity": "What is the exact interpretation of 'breaks the high by 5 pips' \u2014 does the close need to exceed the high by 5 pips, or is an intra-bar touch sufficient?",
+      "assumption_used_for_backtest": "Entry triggered when the close price exceeds (high + 5 pips). Intra-bar touches do not trigger.",
+      "impact_if_different": "Using intra-bar breaks would generate more signals and earlier entries, improving win rate but potentially reducing reliability."
+    },
+    {
+      "ambiguity": "How should 'target 1.5x risk' be calculated \u2014 is risk defined as (entry - stop) or as the dollar amount at risk including position size?",
+      "assumption_used_for_backtest": "Target = entry_price + 1.5 * (entry_price - stop_loss) for longs, expressed in price terms only.",
+      "impact_if_different": "If risk were defined in dollar terms accounting for position size, the take-profit level would differ, affecting the risk-reward ratio."
+    },
+    {
+      "ambiguity": "What exactly does 'close everything before NY close' mean \u2014 does it mean exit before 4pm EST, 5pm EST, or at a specific cut-off?",
+      "assumption_used_for_backtest": "All positions closed at or before 16:00 UTC (approx 4pm GMT/EST).",
+      "impact_if_different": "A different cut-off time could leave positions open during low-liquidity periods or cause premature exits."
+    }
+  ]
+}

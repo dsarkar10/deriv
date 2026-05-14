@@ -1,0 +1,53 @@
+{
+  "strategy_id": "C",
+  "instrument": "Volatility 75 Index",
+  "timeframe": "1min",
+  "data_source": "synthetic_gbm",
+  "entry_conditions": [
+    {
+      "condition_id": "always_entry",
+      "expression": "True",
+      "indicators_required": []
+    }
+  ],
+  "exit_conditions": [
+    {
+      "condition_id": "stop_loss",
+      "expression": "low <= stop_level"
+    },
+    {
+      "condition_id": "take_profit",
+      "expression": "high >= target_level"
+    }
+  ],
+  "position_sizing_rule": "martingale: fixed $1 base stake, double after loss, reset to $1 after win",
+  "stop_loss_rule": "stop_loss_price = entry_price * 0.99 (1% below entry for long)",
+  "take_profit_rule": "take_profit_price = entry_price * 1.01 (1% above entry for long)",
+  "session_filters": [],
+  "risk_controls": [
+    "stop trading if drawdown exceeds $200",
+    "stop trading after 50 trades"
+  ],
+  "explicit_ambiguities": [
+    {
+      "ambiguity": "What does 'predict UP' mean \u2014 is it always a long bet, or is there some directional prediction method?",
+      "assumption_used_for_backtest": "Always long (buy). Entry triggered at every bar since 'predict UP' is interpreted as always going long.",
+      "impact_if_different": "If 'predict UP' were based on actual directional prediction, entry timing and win rate would change significantly."
+    },
+    {
+      "ambiguity": "How is 'next tick' defined \u2014 is it the same 1-minute bar, or does the martingale step happen at the next 1-minute interval?",
+      "assumption_used_for_backtest": "Each 1-minute bar is one tick. Martingale steps occur on each bar.",
+      "impact_if_different": "If the actual tick frequency is higher (sub-minute), the martingale sequence could escalate much faster, reaching the $200 limit sooner."
+    },
+    {
+      "ambiguity": "Is the $1 stake notionally $1 per unit, or is there a contract multiplier?",
+      "assumption_used_for_backtest": "$1 stake = $1 per unit position size. P&L = size * (exit_price / entry_price - 1).",
+      "impact_if_different": "If there's a contract multiplier (e.g., $1 per point), the actual P&L could be much larger, causing faster ruin."
+    },
+    {
+      "ambiguity": "What happens at the $200 drawdown limit \u2014 is it hard stopped or is it a warning? Does it reset daily or per session?",
+      "assumption_used_for_backtest": "Hard stop: the session terminates immediately when cumulative drawdown exceeds $200. Drawdown is tracked from the start of the session.",
+      "impact_if_different": "If drawdown resets daily, the strategy could survive longer. If it's just a warning, losses could exceed $200 significantly."
+    }
+  ]
+}

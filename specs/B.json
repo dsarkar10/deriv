@@ -1,0 +1,65 @@
+{
+  "strategy_id": "B",
+  "instrument": "QQQ",
+  "timeframe": "15min",
+  "data_source": "yfinance",
+  "entry_conditions": [
+    {
+      "condition_id": "initial_entry",
+      "expression": "rsi_14 < 25",
+      "indicators_required": [
+        "rsi_14"
+      ]
+    },
+    {
+      "condition_id": "add_to_position",
+      "expression": "rsi_14 < 20",
+      "indicators_required": [
+        "rsi_14"
+      ]
+    }
+  ],
+  "exit_conditions": [
+    {
+      "condition_id": "rsi_exit",
+      "expression": "rsi_14 >= 50"
+    },
+    {
+      "condition_id": "end_of_day",
+      "expression": "hour >= 15 and minute >= 30"
+    }
+  ],
+  "position_sizing_rule": "half position (50%) on initial entry, remaining 50% added if RSI drops further below 20",
+  "stop_loss_rule": null,
+  "take_profit_rule": null,
+  "session_filters": [
+    "no trading in last 30 minutes of regular session",
+    "no shorts (long only)"
+  ],
+  "risk_controls": [
+    "long only",
+    "no entry in last 30 minutes of trading day"
+  ],
+  "explicit_ambiguities": [
+    {
+      "ambiguity": "What is the 'half position' size \u2014 50% of total capital, 50% of a standard lot, or 50% of some nominal position?",
+      "assumption_used_for_backtest": "Half position = 50% of the maximum position size (assumed 100 shares total). Entry 1: 50 shares, Entry 2: 50 more shares.",
+      "impact_if_different": "Different base position sizing would change the risk profile and dollar returns proportionally."
+    },
+    {
+      "ambiguity": "What is the 'last 30 min' of trading \u2014 does this refer to the regular session (3:30-4:00pm EST), or extended hours?",
+      "assumption_used_for_backtest": "Regular market session ends at 4pm EST, so last 30 min means no entries after 3:30pm EST.",
+      "impact_if_different": "If extended hours are included, the restriction window would shift and could affect after-hours trading opportunities."
+    },
+    {
+      "ambiguity": "Is the RSI(14) based on close prices only, or some other calculation (e.g., typical price)? How is the first value seeded?",
+      "assumption_used_for_backtest": "RSI(14) uses Wilder's smoothed method on close prices with the first 14 periods as warm-up.",
+      "impact_if_different": "Different RSI calculation methods (SMA vs Wilder's, or using HL2 instead of close) would change signal timing and potentially miss entries."
+    },
+    {
+      "ambiguity": "What happens if RSI crosses 25 but never reaches 20 \u2014 does the strategy hold a half position or exit?",
+      "assumption_used_for_backtest": "If only the first condition is met, the strategy holds a half position. Exit conditions still apply (RSI >= 50 or end of day).",
+      "impact_if_different": "If the strategy were to exit partial positions separately or ignore partial fills, trade outcomes would differ."
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "A": {
+    "scenarios": [
+      {
+        "scenario_name": "False Breakout Spikes",
+        "scenario_description": "Price repeatedly spikes above and below the first-hour range without sustained momentum, triggering stop-losses on both sides.",
+        "targeted_failure": "False breakouts causing accumulated losses",
+        "num_trades": 13,
+        "total_return": 2749.56,
+        "max_drawdown": 1152.57,
+        "failure_observed": "high_drawdown"
+      },
+      {
+        "scenario_name": "Gap Through Levels",
+        "scenario_description": "Price gaps through both the breakout level and stop-loss in a single bar after a news event (even on a non-Wednesday).",
+        "targeted_failure": "Slippage and stop-loss hunting",
+        "num_trades": 14,
+        "total_return": 20768.63,
+        "max_drawdown": 0.0,
+        "failure_observed": "strategy_continued_functioning"
+      },
+      {
+        "scenario_name": "No-Breakout Range Day",
+        "scenario_description": "Price stays within the first-hour range all day, and the strategy does nothing.",
+        "targeted_failure": "Missed opportunity / no trades",
+        "num_trades": 2,
+        "total_return": 115.24,
+        "max_drawdown": 0.0,
+        "failure_observed": "strategy_continued_functioning"
+      }
+    ]
+  },
+  "B": {
+    "scenarios": [
+      {
+        "scenario_name": "Sustained Downtrend",
+        "scenario_description": "QQQ enters a sustained downtrend with RSI staying below 25 for multiple days. The strategy buys early and keeps adding as price falls further.",
+        "targeted_failure": "No stop loss in a trend against position",
+        "num_trades": 35,
+        "total_return": -21.19,
+        "max_drawdown": 21.19,
+        "failure_observed": "strategy_continued_functioning"
+      },
+      {
+        "scenario_name": "Flash Crash",
+        "scenario_description": "A sudden flash crash pushes RSI to 10, triggering full position entry, then immediately reverses.",
+        "targeted_failure": "Buying at the bottom of a crash that immediately reverses",
+        "num_trades": 1,
+        "total_return": -0.08,
+        "max_drawdown": 0.08,
+        "failure_observed": "strategy_continued_functioning"
+      },
+      {
+        "scenario_name": "RSI Never Recovers",
+        "scenario_description": "After entry at RSI < 25, the index continues falling and RSI stays below 50 all day, so the end-of-day exit forces a loss.",
+        "targeted_failure": "Forced end-of-day exit at a loss",
+        "num_trades": 35,
+        "total_return": -14.35,
+        "max_drawdown": 14.35,
+        "failure_observed": "strategy_continued_functioning"
+      }
+    ]
+  },
+  "C": {
+    "scenarios": [
+      {
+        "scenario_name": "Long Losing Streak",
+        "scenario_description": "10 consecutive losses cause the martingale stake to escalate from $1 to $512, far exceeding the $200 drawdown limit by trade 8.",
+        "targeted_failure": "Ruin via martingale escalation",
+        "num_trades": 50,
+        "total_return": -11258995408251.37,
+        "max_drawdown": 11258995408251.37,
+        "failure_observed": "significant_loss"
+      },
+      {
+        "scenario_name": "Alternating Wins and Losses",
+        "scenario_description": "A pattern of win, loss, win, loss prevents the martingale from recovering. Stake stays at $1-$2 but drawdown accumulates.",
+        "targeted_failure": "Drawdown grind despite alternating outcomes",
+        "num_trades": 50,
+        "total_return": 0.22,
+        "max_drawdown": 0.15,
+        "failure_observed": "strategy_continued_functioning"
+      },
+      {
+        "scenario_name": "Extended Drawdown with Delayed Recovery",
+        "scenario_description": "A string of 5 losses ($1+$2+$4+$8+$16 = $31 loss) followed by small wins that don't recover losses before hitting 50 trades.",
+        "targeted_failure": "Trade limit reached before drawdown recovery",
+        "num_trades": 37,
+        "total_return": -1210721449.21,
+        "max_drawdown": 1210721449.21,
+        "failure_observed": "significant_loss"
+      }
+    ]
+  }
+}

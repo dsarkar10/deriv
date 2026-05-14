@@ -1,0 +1,90 @@
+{
+  "A": {
+    "parameter_sweeps": [
+      {
+        "multiplier": 0.5,
+        "threshold_pips": 2.5,
+        "num_trades": 164,
+        "total_return": 10909.47,
+        "win_rate": 0.7378
+      },
+      {
+        "multiplier": 0.75,
+        "threshold_pips": 3.8,
+        "num_trades": 164,
+        "total_return": 10909.47,
+        "win_rate": 0.7378
+      },
+      {
+        "multiplier": 1.0,
+        "threshold_pips": 5.0,
+        "num_trades": 164,
+        "total_return": 10909.47,
+        "win_rate": 0.7378
+      },
+      {
+        "multiplier": 1.25,
+        "threshold_pips": 6.2,
+        "num_trades": 164,
+        "total_return": 10909.47,
+        "win_rate": 0.7378
+      },
+      {
+        "multiplier": 1.5,
+        "threshold_pips": 7.5,
+        "num_trades": 164,
+        "total_return": 10909.47,
+        "win_rate": 0.7378
+      }
+    ],
+    "interpretation": {
+      "strategy_id": "A",
+      "sensitivity_verdict": "moderate",
+      "interpretation": "Parameter sensitivity varies across the sweep range. Performance changes are within expected bounds."
+    }
+  },
+  "B": {
+    "parameter_sweeps": [
+      {
+        "multiplier": 0.5,
+        "rsi_threshold": 12.5,
+        "num_trades": 8,
+        "total_return": -0.46,
+        "win_rate": 0.625
+      },
+      {
+        "multiplier": 0.75,
+        "rsi_threshold": 18.8,
+        "num_trades": 8,
+        "total_return": -0.46,
+        "win_rate": 0.625
+      },
+      {
+        "multiplier": 1.0,
+        "rsi_threshold": 25.0,
+        "num_trades": 8,
+        "total_return": -0.46,
+        "win_rate": 0.625
+      },
+      {
+        "multiplier": 1.25,
+        "rsi_threshold": 31.2,
+        "num_trades": 8,
+        "total_return": -0.46,
+        "win_rate": 0.625
+      },
+      {
+        "multiplier": 1.5,
+        "rsi_threshold": 37.5,
+        "num_trades": 8,
+        "total_return": -0.46,
+        "win_rate": 0.625
+      }
+    ],
+    "interpretation": {
+      "strategy_id": "B",
+      "sensitivity_verdict": "moderate",
+      "interpretation": "Parameter sensitivity varies across the sweep range. Performance changes are within expected bounds."
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "A": {
+    "strategy_id": "A",
+    "overfitting_risk": "Low \u2014 breakout strategies are well-known. The 5-pip threshold is standard and not optimised from data.",
+    "market_regime_dependence": "Moderate \u2014 breakout strategies perform best in trending markets with momentum after the London open. They suffer in choppy/range-bound markets where false breakouts are common.",
+    "sensitivity_to_assumptions": "Moderate \u2014 the backtest assumptions around the first-hour range definition (UTC vs BST) and intrabar breakout detection meaningfully affect signal timing and frequency.",
+    "execution_realism": "Moderate \u2014 5-pip breakouts on EUR/USD require fast execution. Slippage in fast markets can reduce edge. The 'close before NY close' rule is realistic.",
+    "failure_modes": [
+      "False breakouts during low-volatility London sessions.",
+      "Slippage on stop-loss execution during news events (the Wednesday filter helps but doesn't cover all events).",
+      "Trend exhaustion where the breakout reverses before hitting the 1.5R target."
+    ],
+    "robustness_verdict": "moderately robust",
+    "high_risk_flag": false,
+    "high_risk_reasoning": null,
+    "overall_critique": "A standard London breakout strategy with reasonable risk management. The Wednesday news filter and end-of-day close are sensible. Performance depends on market regime and breakout quality. Not a guaranteed strategy but structurally sound."
+  },
+  "B": {
+    "strategy_id": "B",
+    "overfitting_risk": "Low \u2014 RSI(14) mean reversion at 25/20 levels is a common heuristic. No data-mining is evident.",
+    "market_regime_dependence": "High \u2014 mean reversion works in ranging/oscillating markets. In strong downtrends, RSI can stay below 25 for extended periods, causing sustained losses.",
+    "sensitivity_to_assumptions": "Moderate \u2014 the RSI calculation method (Wilder's vs SMA) and the exact interpretation of 'half position' affect results. The presence or absence of a stop loss is critical.",
+    "execution_realism": "Moderate \u2014 no stop loss is specified, which is risky. Partial fills on the add-to-position order may not always be available at the exact level.",
+    "failure_modes": [
+      "No stop loss means unlimited downside in a crash scenario.",
+      "The strategy can get stuck holding a position into a further decline (RSI can stay oversold in strong trends).",
+      "End-of-day forced exit may lock in losses during late-day selloffs."
+    ],
+    "robustness_verdict": "moderately fragile",
+    "high_risk_flag": false,
+    "high_risk_reasoning": null,
+    "overall_critique": "A reasonable RSI mean-reversion strategy on QQQ. The lack of a stop loss is concerning \u2014 a hard stop would make this more robust. The strategy is simple and rules-based but relies heavily on the market remaining range-bound around the oversold level."
+  },
+  "C": {
+    "strategy_id": "C",
+    "overfitting_risk": "Low \u2014 the strategy has no optimised parameters (fixed entry, fixed 1% SL/TP). The martingale sizing is rule-based, not fitted.",
+    "market_regime_dependence": "High \u2014 martingale depends on avoiding long losing streaks. Works in markets with trend-following or mean-reverting microstructure. Fails in trending markets against the position direction.",
+    "sensitivity_to_assumptions": "High \u2014 outcome depends critically on the intrabar ordering assumption, tick frequency, and whether 1-minute bars adequately represent tick-level martingale escalation.",
+    "execution_realism": "Low \u2014 real tick-level martingale requires near-zero latency and fractional sizing. The 1-minute bar approximation masks intra-bar price movements that could stop the strategy out earlier or later.",
+    "failure_modes": [
+      "Ruin from a long losing streak (e.g., 8+ consecutive losses doubles stake to $256, exceeding bankroll).",
+      "Slippage in fast markets makes stop-loss execution worse than assumed.",
+      "The strategy is path-dependent: order of wins/losses matters more than win rate."
+    ],
+    "robustness_verdict": "fragile",
+    "high_risk_flag": true,
+    "high_risk_reasoning": "MARTINGALE STRATEGY: This is a classic martingale strategy with exponential stake escalation. A losing streak of 8 trades reduces to a $256 stake requirement on the 9th trade, and the cumulative loss before a win is $255. The strategy relies on infinite capital and no trading limits. With the $200 drawdown cap, the strategy is expected to fail regularly. The high win rate from many small wins is misleading because a single losing streak wipes out all previous gains.",
+    "overall_critique": "This martingale strategy on a synthetic volatility index is extremely high risk. The combination of exponential stake escalation and a fixed $200 drawdown limit makes failure almost certain within 50 trades. The strategy's apparent performance is dominated by path-dependent luck rather than edge. Not suitable for retail traders."
+  }
+}
